@@ -4,6 +4,13 @@
 int main()
 {
 	Memory memory;
-	std::cout << "Hello World!\n";
+	memory.write(0x200, 0xAB);
+
+	std::cout << static_cast<int>(memory.read(0x200)) << '\n';
+
+	memory.reset();
+
+	std::cout << static_cast<int>(memory.read(0x200)) << '\n';
+
 	return 0;
 }
