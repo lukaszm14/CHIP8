@@ -1,4 +1,5 @@
 #include "Memory.hpp"
+#include <fstream>
 
 Memory::Memory()
 {
@@ -22,5 +23,16 @@ void Memory::write(uint16_t address, uint8_t data)
     
 void Memory::loadRom(const std::string& fileName)
 {
+	//file openning
+	std::ifstream file(fileName, std::ios::binary);
+
+	if(!file.is_open())
+	{
+		std::cout<<"Cannot open ROM.\n";
+	}
+	else
+	{
+		std::cout<<"Oppened ROM.\n";
+	}
 
 }
