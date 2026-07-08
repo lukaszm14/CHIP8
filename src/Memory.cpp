@@ -1,5 +1,6 @@
 #include "Memory.hpp"
 #include <fstream>
+#include <iostream>
 
 Memory::Memory()
 {
@@ -25,6 +26,8 @@ void Memory::loadRom(const std::string& fileName)
 {
 	//file openning
 	std::ifstream file(fileName, std::ios::binary);
+	
+	auto fileSize = file.tellg();
 
 	if(!file.is_open())
 	{
@@ -33,6 +36,13 @@ void Memory::loadRom(const std::string& fileName)
 	else
 	{
 		std::cout<<"Oppened ROM.\n";
+
+		//opend file size checking
+		file.seekg(0, std::ios_base::end);
+		fileSize = file.tellg();
+		std::cout << fileSize << '\n';
+
+		file.seekg(0, std::ios_base::beg);
 	}
 
 }
