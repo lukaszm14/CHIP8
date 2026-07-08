@@ -4,5 +4,6 @@
 int main()
 {
 	Memory memory;
+
 	return 0;
 }

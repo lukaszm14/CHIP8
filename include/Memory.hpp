@@ -14,5 +14,7 @@ public:
     void loadRom(const std::string& fileName);
 
 private:
-    std::array<uint8_t, 4096> memory;
+    static constexpr std::size_t MemorySize = 4096;
+    static constexpr std::size_t ProgramStart = 0x200;
+    std::array<uint8_t, MemorySize> memory;
 };

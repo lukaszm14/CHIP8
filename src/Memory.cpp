@@ -1,6 +1,8 @@
 #include "Memory.hpp"
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 Memory::Memory()
 {
@@ -26,23 +28,29 @@ void Memory::loadRom(const std::string& fileName)
 {
 	//file openning
 	std::ifstream file(fileName, std::ios::binary);
-	
-	auto fileSize = file.tellg();
 
 	if(!file.is_open())
 	{
 		std::cout<<"Cannot open ROM.\n";
+		return;
 	}
 	else
 	{
-		std::cout<<"Oppened ROM.\n";
-
-		//opend file size checking
+		//opened file size checking
 		file.seekg(0, std::ios_base::end);
-		fileSize = file.tellg();
-		std::cout << fileSize << '\n';
-
+		auto fileSize = file.tellg();
 		file.seekg(0, std::ios_base::beg);
-	}
 
+		if(fileSize > MemorySize - ProgramStart)
+		{
+			std::cout<<"File too big.\n";
+			return;
+		}
+
+		//memory
+		std::vector<uint8_t> buffer(fileSize);
+		file.read(reinterpret_cast<char*>(buffer.data()), fileSize);
+		
+		std::copy(buffer.begin(), buffer.end(), memory.begin() + ProgramStart);
+	}
 }
