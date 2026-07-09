@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(chip8 
     src/main.cpp 
     src/Memory.cpp
+    src/CPU.cpp
 )
 
 target_include_directories(chip8 PRIVATE include)
