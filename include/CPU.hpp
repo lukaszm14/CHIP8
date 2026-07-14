@@ -1,17 +1,24 @@
 #pragma once
 
-#include <vector>
-#include <stack>
+#include <array>
+#include "Memory.hpp"
 
 class CPU
 {
 public:
     CPU();
-
-    uint16_t counter = 0;
-    std::vector<uint8_t> reg;
+    void cycle(Memory& memory);
+    void reset();
 
 private:
-    std::stack<uint8_t> stack;
+    std::array<uint8_t, 16> V;
+    uint16_t I;
 
+    std::array<uint16_t, 16> stack;
+
+    uint16_t program_counter;
+    uint8_t stack_pointer;
+    
+    uint8_t delay_timer;
+    uint8_t sound_timer;
 };
