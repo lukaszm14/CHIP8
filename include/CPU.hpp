@@ -4,6 +4,16 @@
 
 #include "Memory.hpp"
 
+struct Instruction
+{
+    uint8_t op = 0;
+    uint16_t nnn = 0;
+    uint8_t n = 0;
+    uint8_t x = 0;
+    uint8_t y = 0;
+    uint8_t kk = 0;
+};
+
 class CPU
 {
 public:
@@ -22,4 +32,8 @@ private:
     
     uint8_t delay_timer;
     uint8_t sound_timer;
+
+    uint16_t fetch(Memory& memory);
+    Instruction decode(uint16_t opcode);
+    void execute(Instruction inst, Memory& memory);
 };
