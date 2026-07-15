@@ -1,14 +1,15 @@
 #pragma once
 
 #include <array>
+
 #include "Memory.hpp"
 
 class CPU
 {
 public:
     CPU();
-    void cycle(Memory& memory);
     void reset();
+    void cycle(Memory& memory);
 
 private:
     std::array<uint8_t, 16> V;
