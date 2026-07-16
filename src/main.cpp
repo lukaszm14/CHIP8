@@ -10,16 +10,18 @@ int main()
 	CPU cpu;
 
 	uint16_t start = 0x200;
-	std::vector<uint8_t> mess(5);
+	std::vector<uint8_t> mess(8);
 	mess = {
-		0x12, 0x34, 0xbb, 0xff, 0x01
+		0x12, 0x02, 
+		0x60, 0x01,
+		0x70, 0x02,
+		0x73, 0x0f
 	};
 	for(auto c:mess)
 		memory.write(start++, c);
-
-	cpu.cycle(memory);
-	cpu.cycle(memory);
-	cpu.cycle(memory);
+	
+	for(int i = 0; i < mess.size(); i++)
+		cpu.cycle(memory);
 
 	return 0;
 }

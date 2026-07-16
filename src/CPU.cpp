@@ -26,7 +26,6 @@ void CPU::cycle(Memory& memory)
     uint16_t opcode = fetch(memory);
     Instruction inst = decode(opcode);
     execute(inst, memory);
-
 }
 
 uint16_t CPU::fetch(Memory& memory)
@@ -34,7 +33,7 @@ uint16_t CPU::fetch(Memory& memory)
     uint16_t opcode = memory.read(program_counter);
     program_counter++;
 
-    opcode = opcode<<8;
+    opcode = opcode << 8;
     opcode = opcode | memory.read(program_counter);
     program_counter++;
 
@@ -46,7 +45,7 @@ Instruction CPU::decode(uint16_t opcode)
     Instruction inst;
 
     inst.op = (0xf000 & opcode) >> 12;
-    inst.nnn = 0x3fff & opcode;
+    inst.nnn = 0x0fff & opcode;
     inst.n = 0x000f & opcode;
     inst.x = (0x0f00 & opcode) >> 8;
     inst.y = (0x00f0 & opcode) >> 4;
@@ -57,5 +56,37 @@ Instruction CPU::decode(uint16_t opcode)
 
 void CPU::execute(Instruction inst, Memory& memory)
 {
+    switch(inst.op)
+    {
+        case 0x1:
+            JP_addr(inst);
+            break;
+        case 0x6:
+            LD_Vx_byte(inst);
+            break;
+        case 0x7:
+            ADD_Vx_byte(inst);
+            break;
+        default:
+            std::cout << "Not implemented\n";
+            break;
+    }
+}
 
+// 1nnn
+void CPU::JP_addr(Instruction inst)
+{
+    program_counter = inst.nnn;
+}
+
+// 6xkk
+void CPU::LD_Vx_byte(Instruction inst)
+{
+    V[inst.x] = inst.kk;
+}
+
+// 7xkk
+void CPU::ADD_Vx_byte(Instruction inst)
+{
+    V[inst.x] += inst.kk;
 }

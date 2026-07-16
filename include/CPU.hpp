@@ -36,4 +36,8 @@ private:
     uint16_t fetch(Memory& memory);
     Instruction decode(uint16_t opcode);
     void execute(Instruction inst, Memory& memory);
+
+    void JP_addr(Instruction inst);
+    void LD_Vx_byte(Instruction inst);
+    void ADD_Vx_byte(Instruction inst);
 };
