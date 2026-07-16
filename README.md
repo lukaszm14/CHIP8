@@ -31,7 +31,7 @@ Build instructions will be added later.
 - [x] Memory module
 - [x] ROM loading
 - [ ] CPU
-- [ ] Opcode decoding
+- [x] Opcode decoding
 - [ ] Display
 - [ ] Keyboard
 - [ ] Timers
