@@ -54,12 +54,18 @@ Instruction CPU::decode(uint16_t opcode)
     return inst;
 }
 
-void CPU::execute(Instruction inst, Memory& memory)
+void CPU::execute(Instruction& inst, Memory& memory)
 {
     switch(inst.op)
     {
+        case 0x0:
+            RET();
+            break;
         case 0x1:
             JP_addr(inst);
+            break;
+        case 0x2:
+            CALL_addr(inst);
             break;
         case 0x6:
             LD_Vx_byte(inst);
@@ -67,26 +73,51 @@ void CPU::execute(Instruction inst, Memory& memory)
         case 0x7:
             ADD_Vx_byte(inst);
             break;
+        case 0xA:
+            LD_I_addr(inst);
+            break;
         default:
             std::cout << "Not implemented\n";
             break;
     }
 }
 
+// 00EE
+void CPU::RET()
+{
+    stack_pointer--;
+    program_counter = stack[stack_pointer];
+}
+
 // 1nnn
-void CPU::JP_addr(Instruction inst)
+void CPU::JP_addr(Instruction& inst)
 {
     program_counter = inst.nnn;
 }
 
+// 2nnn
+void CPU::CALL_addr(Instruction& inst)
+{
+    stack[stack_pointer] = program_counter;
+    stack_pointer++;
+
+    program_counter = inst.nnn;
+}
+
 // 6xkk
-void CPU::LD_Vx_byte(Instruction inst)
+void CPU::LD_Vx_byte(Instruction& inst)
 {
     V[inst.x] = inst.kk;
 }
 
 // 7xkk
-void CPU::ADD_Vx_byte(Instruction inst)
+void CPU::ADD_Vx_byte(Instruction& inst)
 {
     V[inst.x] += inst.kk;
+}
+
+//Annn
+void CPU::LD_I_addr(Instruction& inst)
+{
+    I = inst.nnn;
 }

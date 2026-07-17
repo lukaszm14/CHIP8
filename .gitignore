@@ -1,8 +1,10 @@
 build/
 .vscode/
+tests/
 
 *.exe
 *.o
 *.obj
+*.gdb
 
 .DS_Store
