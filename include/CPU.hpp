@@ -36,22 +36,34 @@ private:
     uint16_t fetch(Memory& memory);
     Instruction decode(uint16_t opcode);
     void execute(Instruction& inst, Memory& memory);
-    
+
     // 00EE
     void RET();
 
     // 1nnn
-    void JP_addr(Instruction& inst);
+    void JP_addr(const Instruction& inst);
 
     // 2nnn
-    void CALL_addr(Instruction& inst);
+    void CALL_addr(const Instruction& inst);
+
+    // 3xkk
+    void SE_Vx_byte(const Instruction& inst);
+    
+    // 4xkk
+    void SNE_Vx_byte(const Instruction& inst);
+    
+    // 5xy0
+    void SE_Vx_Vy(const Instruction& inst);
 
     // 6xkk
-    void LD_Vx_byte(Instruction& inst);
+    void LD_Vx_byte(const Instruction& inst);
 
     // 7xkk
-    void ADD_Vx_byte(Instruction& inst);
+    void ADD_Vx_byte(const Instruction& inst);
+
+    // 9xy0
+    void SNE_Vx_Vy(const Instruction& inst);
 
     // Annn
-    void LD_I_addr(Instruction& inst);
+    void LD_I_addr(const Instruction& inst);
 };

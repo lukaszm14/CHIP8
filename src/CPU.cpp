@@ -67,11 +67,23 @@ void CPU::execute(Instruction& inst, Memory& memory)
         case 0x2:
             CALL_addr(inst);
             break;
+        case 0x3:
+            SE_Vx_byte(inst);
+            break;
+        case 0x4:
+            SNE_Vx_byte(inst);
+            break;
+        case 0x5:
+            SE_Vx_Vy(inst);
+            break;
         case 0x6:
             LD_Vx_byte(inst);
             break;
         case 0x7:
             ADD_Vx_byte(inst);
+            break;
+        case 0x9:
+            SNE_Vx_Vy(inst);
             break;
         case 0xA:
             LD_I_addr(inst);
@@ -90,13 +102,13 @@ void CPU::RET()
 }
 
 // 1nnn
-void CPU::JP_addr(Instruction& inst)
+void CPU::JP_addr(const Instruction& inst)
 {
     program_counter = inst.nnn;
 }
 
 // 2nnn
-void CPU::CALL_addr(Instruction& inst)
+void CPU::CALL_addr(const Instruction& inst)
 {
     stack[stack_pointer] = program_counter;
     stack_pointer++;
@@ -104,20 +116,48 @@ void CPU::CALL_addr(Instruction& inst)
     program_counter = inst.nnn;
 }
 
+// 3xkk
+void CPU::SE_Vx_byte(const Instruction& inst)
+{
+    if(V[inst.x] == inst.kk)
+        program_counter += 2;
+}
+
+// 4xkk
+void CPU::SNE_Vx_byte(const Instruction& inst)
+{
+    if(V[inst.x] == inst.kk)
+        program_counter += 2;
+}
+
+// 5xy0
+void CPU::SE_Vx_Vy(const Instruction& inst)
+{
+    if(V[inst.x] == V[inst.y])
+        program_counter += 2;
+}
+
 // 6xkk
-void CPU::LD_Vx_byte(Instruction& inst)
+void CPU::LD_Vx_byte(const Instruction& inst)
 {
     V[inst.x] = inst.kk;
 }
 
 // 7xkk
-void CPU::ADD_Vx_byte(Instruction& inst)
+void CPU::ADD_Vx_byte(const Instruction& inst)
 {
     V[inst.x] += inst.kk;
 }
 
-//Annn
-void CPU::LD_I_addr(Instruction& inst)
+// 9xy0
+void CPU::SNE_Vx_Vy(const Instruction& inst)
+{
+    if(V[inst.x] == V[inst.y])
+        program_counter += 2;
+}
+
+// Annn
+void CPU::LD_I_addr(const Instruction& inst)
 {
     I = inst.nnn;
 }

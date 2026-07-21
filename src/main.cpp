@@ -14,7 +14,7 @@ int main()
 
 	memory.loadRom("tests/test1.bin");
 	
-	for(int i = 0; i < 7; i++)
+	for(int i = 0; i < 13; i++)
 		cpu.cycle(memory);
 
 	return 0;
