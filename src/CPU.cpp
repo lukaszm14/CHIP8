@@ -239,7 +239,7 @@ void CPU::SUB_Vx_Vy(const Instruction& inst)
 void CPU::SHR_Vx_Vy(const Instruction& inst)
 {
     V[0xF] = V[inst.x] & 0x01;
-    V[inst.x] = V[inst.x] >> 2;
+    V[inst.x] = V[inst.x] >> 1;
 }
 
 // 8xy7
