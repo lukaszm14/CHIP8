@@ -12,7 +12,7 @@ int main()
 	uint16_t start = 0x200;
 	std::vector<uint8_t> program;
 
-	memory.loadRom("tests/test1.bin");
+	memory.loadRom("tests/test.bin");
 	
 	for(int i = 0; i < 13; i++)
 		cpu.cycle(memory);

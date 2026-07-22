@@ -35,7 +35,9 @@ private:
 
     uint16_t fetch(Memory& memory);
     Instruction decode(uint16_t opcode);
-    void execute(Instruction& inst, Memory& memory);
+    void execute(const Instruction& inst, Memory& memory);
+
+    void execute_alu(const Instruction& inst);
 
     // 00EE
     void RET();
@@ -60,6 +62,33 @@ private:
 
     // 7xkk
     void ADD_Vx_byte(const Instruction& inst);
+
+    // 8xy0
+    void LD_Vx_Vy(const Instruction& inst);
+
+    // 8xy1
+    void OR_Vx_Vy(const Instruction& inst);
+
+    // 8xy2
+    void AND_Vx_Vy(const Instruction& inst);
+
+    // 8xy3
+    void XOR_Vx_Vy(const Instruction& inst);
+
+    // 8xy4
+    void ADD_Vx_Vy(const Instruction& inst);
+
+    // 8xy5
+    void SUB_Vx_Vy(const Instruction& inst);
+
+    // 8xy6
+    void SHR_Vx_Vy(const Instruction& inst);
+
+    // 8xy7
+    void SUBN_Vx_Vy(const Instruction& inst);
+
+    // 8xyE
+    void SHL_Vx_Vy(const Instruction& inst);
 
     // 9xy0
     void SNE_Vx_Vy(const Instruction& inst);

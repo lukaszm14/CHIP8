@@ -54,7 +54,7 @@ Instruction CPU::decode(uint16_t opcode)
     return inst;
 }
 
-void CPU::execute(Instruction& inst, Memory& memory)
+void CPU::execute(const Instruction& inst, Memory& memory)
 {
     switch(inst.op)
     {
@@ -82,6 +82,9 @@ void CPU::execute(Instruction& inst, Memory& memory)
         case 0x7:
             ADD_Vx_byte(inst);
             break;
+        case 0x8:
+            execute_alu(inst);
+            break;
         case 0x9:
             SNE_Vx_Vy(inst);
             break;
@@ -91,6 +94,42 @@ void CPU::execute(Instruction& inst, Memory& memory)
         default:
             std::cout << "Not implemented\n";
             break;
+    }
+}
+
+void CPU::execute_alu(const Instruction& inst)
+{
+    switch (inst.n)
+    {
+    case 0x0:
+        LD_Vx_Vy(inst);
+        break;
+    case 0x1:
+        OR_Vx_Vy(inst);
+        break;
+    case 0x2:
+        AND_Vx_Vy(inst);
+        break;
+    case 0x3:
+        XOR_Vx_Vy(inst);
+        break;
+    case 0x4:
+        ADD_Vx_Vy(inst);
+        break;
+    case 0x5:
+        SUB_Vx_Vy(inst);
+        break;
+    case 0x6:
+        SHR_Vx_Vy(inst);
+        break;
+    case 0x7:
+        SUBN_Vx_Vy(inst);
+        break;
+    case 0xE:
+        SHL_Vx_Vy(inst);
+        break;
+    default:
+        break;
     }
 }
 
@@ -126,7 +165,7 @@ void CPU::SE_Vx_byte(const Instruction& inst)
 // 4xkk
 void CPU::SNE_Vx_byte(const Instruction& inst)
 {
-    if(V[inst.x] == inst.kk)
+    if(V[inst.x] != inst.kk)
         program_counter += 2;
 }
 
@@ -149,10 +188,82 @@ void CPU::ADD_Vx_byte(const Instruction& inst)
     V[inst.x] += inst.kk;
 }
 
+// 8xy0
+void CPU::LD_Vx_Vy(const Instruction& inst)
+{
+    V[inst.x] = V[inst.y];
+}
+
+// 8xy1
+void CPU::OR_Vx_Vy(const Instruction& inst)
+{
+    V[inst.x] = V[inst.x] | V[inst.y];
+}
+
+// 8xy2
+void CPU::AND_Vx_Vy(const Instruction& inst)
+{
+    V[inst.x] = V[inst.x] & V[inst.y];
+}
+
+// 8xy3
+void CPU::XOR_Vx_Vy(const Instruction& inst)
+{
+    V[inst.x] = V[inst.x] ^ V[inst.y];
+}
+
+// 8xy4
+void CPU::ADD_Vx_Vy(const Instruction& inst)
+{
+    uint16_t sum = V[inst.x] + V[inst.y];
+    if(sum > 0xFF)
+        V[0xF] = 1;
+    else
+        V[0xF] = 0;
+    V[inst.x] = static_cast<uint8_t>(sum);
+}
+
+// 8xy5
+void CPU::SUB_Vx_Vy(const Instruction& inst)
+{
+    if(V[inst.x] > V[inst.y])
+        V[0xF] = 1;
+    else
+        V[0xF] = 0;
+
+    V[inst.x] = V[inst.x] - V[inst.y];
+
+}
+
+// 8xy6
+void CPU::SHR_Vx_Vy(const Instruction& inst)
+{
+    V[0xF] = V[inst.x] & 0x01;
+    V[inst.x] = V[inst.x] >> 2;
+}
+
+// 8xy7
+void CPU::SUBN_Vx_Vy(const Instruction& inst)
+{
+    if(V[inst.y] > V[inst.x])
+        V[0xF] = 1;
+    else
+        V[0xF] = 0;
+
+    V[inst.x] = V[inst.y] - V[inst.x];
+}
+
+// 8xyE
+void CPU::SHL_Vx_Vy(const Instruction& inst)
+{
+    V[0xF] = (V[inst.x] & 0x80) >> 7;
+    V[inst.x] = V[inst.x] << 1;
+}
+
 // 9xy0
 void CPU::SNE_Vx_Vy(const Instruction& inst)
 {
-    if(V[inst.x] == V[inst.y])
+    if(V[inst.x] != V[inst.y])
         program_counter += 2;
 }
 
